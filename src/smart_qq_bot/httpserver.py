@@ -1,5 +1,6 @@
-from flask import Flask, redirect
+from flask import Flask, redirect, send_file
 from webhook.github import Webhook
+
 
 app = Flask(__name__)  # Standard Flask app
 webhook = Webhook(app)  # Defines '/postreceive' endpoint
@@ -16,9 +17,9 @@ def index():
 
 
 @app.route('/qr_code.jpg')
-def qr_code():
+def staticfiles():
     from smart_qq_bot.config import QR_CODE_FNAME
-    return app.send_static_file(QR_CODE_FNAME)
+    return send_file('../' + QR_CODE_FNAME)
 
 
 @app.route('/re-login')

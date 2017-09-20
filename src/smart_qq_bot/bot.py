@@ -325,6 +325,7 @@ class QQBot(object):
         elif redirect_url is None:
             raise QRLoginFailed(login_failed_tips)
         else:
+            print(html)
             html = self.client.get(redirect_url)
             logger.debug("QR Login redirect_url response: %s" % html)
             return True
@@ -361,6 +362,7 @@ class QQBot(object):
     def login(self, no_gui=False):
         try:
             self._login_by_cookie()
+            raise CookieLoginFailed("asd")
         except CookieLoginFailed as e:
             logger.exception(e)
             while True:
