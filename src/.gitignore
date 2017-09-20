@@ -1,0 +1,71 @@
+*.py[cod]
+
+# C extensions
+*.so
+
+# Packages
+*.egg
+*.egg-info
+.version
+build*
+eggs
+parts
+cputils/*.c
+bin
+var
+sdist
+develop-eggs
+.installed.cfg
+lib64
+staticfiles/
+__pycache__
+*lock.json
+*.pyc
+statics_dir/media
+
+# Installer logs
+pip-log.txt
+logs/*.log
+
+# Unit test / coverage reports
+.coverage
+.tox
+nosetests.xml
+
+# Mr Developer
+.mr.developer.cfg
+.project
+.pydevproject
+
+*.patch
+*.db
+*.swp
+*.#*
+adtracker2*
+adtracker4bizark*
+api_baiduv2*
+api_baiduv3_java_source*
+localscripts*
+.settings*
+/vscode
+cas/
+.idea
+.cache
+statics_dir/static1/dist
+statics_dir/static1/error
+front-end/node_modules
+statics_dir/static1/node_modules
+
+
+
+\.vscode/
+# orm's migrations
+migrations
+
+tmp/*
+statics_dir/static1/ocSSCY
+
+*.un~
+
+tags
+
