@@ -85,4 +85,3 @@ SmartQQBot
 + [Cheng Gu](https://github.com/gucheen)
 + [winkidney](https://github.com/winkidney)
 + [eastpiger](https://github.com/eastpiger)
-
