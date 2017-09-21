@@ -18,8 +18,8 @@ def index():
 
 @app.route('/qr_code.jpg')
 def staticfiles():
-    from smart_qq_bot.config import QR_CODE_FNAME
-    return send_file('../' + QR_CODE_FNAME)
+    from smart_qq_bot.config import QR_CODE_PATH
+    return send_file(QR_CODE_PATH)
 
 
 @app.route('/re-login')
