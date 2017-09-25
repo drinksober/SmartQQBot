@@ -289,7 +289,7 @@ class QQBot(object):
 
         while True:
             error_times += 1
-            logger.info("Downloading QRCode file...")
+            logger.info("Downloading QRCode file %s" % self.qrcode_path)
             self.client.download(
                 'https://ssl.ptlogin2.qq.com/ptqrshow?appid={0}&e=0&l=L&s=8&d=72&v=4'.format(appid),
                 self.qrcode_path
@@ -305,6 +305,7 @@ class QQBot(object):
                     qr_validation_url, appid, start_time, mibao_css, js_ver,
                     sign, init_url, qrsig
                 )
+                logger.info('ret: %s\nredirect_url: %s' % (ret_code, redirect_url))
 
                 if ret_code in (
                         QR_CODE_STATUS['succeed'], QR_CODE_STATUS["qr_code_expired"]
@@ -359,13 +360,23 @@ class QQBot(object):
             redirect_url = redirect_info[0]
         return ret_code, redirect_url
 
+    def logout(self):
+        url = 'http://ptlogin2.qq.com/logout?pt4_token=&pt4_hkey=0&pt4_ptcz=1300792120&deep_logout=1'
+        logger.info('try logout...')
+        try:
+            self.client.get(url)
+        except Exception:
+            from traceback import format_exc
+            logger.info(format_exc())
+
     def login(self, no_gui=False):
+
         try:
             self._login_by_cookie()
-            raise CookieLoginFailed("asd")
         except CookieLoginFailed as e:
             logger.exception(e)
             while True:
+                self.logout()
                 if self._login_by_qrcode(no_gui):
                     if self._login_by_cookie():
                         break

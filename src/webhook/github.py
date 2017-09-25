@@ -2,6 +2,7 @@ import collections
 import hashlib
 import hmac
 import logging
+import json
 
 import six
 from flask import abort, request
@@ -52,6 +53,7 @@ class Webhook(object):
     def _postreceive(self):
         """Callback from Flask"""
 
+        print(request.headers)
         digest = self._get_digest()
 
         if digest is not None:
@@ -64,7 +66,7 @@ class Webhook(object):
                 abort(400, 'Invalid signature')
 
         event_type = _get_header('X-Github-Event')
-        data = request.get_json()
+        data = json.loads(request.get_json())['payload']
 
         if data is None:
             abort(400, 'Request body must contain json')

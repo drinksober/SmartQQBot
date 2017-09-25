@@ -1,7 +1,7 @@
 # coding: utf-8
 from smart_qq_bot.httpserver import webhook
 
-config = {"baxterthehacker/public-repo": {'groups': ["锄禾日当午"], 'friends': ['746058508']}}
+config = {"baxterthehacker/public-repo": {'groups': [u"锄禾日当午"], 'friends': ['746058508']}}
 groupById = {}
 friendById = {}
 
