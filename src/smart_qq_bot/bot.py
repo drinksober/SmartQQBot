@@ -215,6 +215,7 @@ class QQBot(object):
                 if retry_times == 0:
                     raise CookieLoginFailed("Cookies login fail, response decode error too many times")
         if ret['retcode'] != 0:
+            self.client.clear_cookies()
             raise CookieLoginFailed("Login step 1 failed with response:\n %s " % ret)
 
         response2 = self.client.get(
@@ -227,6 +228,7 @@ class QQBot(object):
         )
         ret2 = json.loads(response2)
         if ret2['retcode'] != 0:
+            self.client.clear_cookies()
             raise CookieLoginFailed(
                 "Login step 2 failed with response:\n %s " % ret2
             )

@@ -66,7 +66,7 @@ class Webhook(object):
                 abort(400, 'Invalid signature')
 
         event_type = _get_header('X-Github-Event')
-        data = json.loads(request.get_json())['payload']
+        data = json.loads(request.form['payload'])
 
         if data is None:
             abort(400, 'Request body must contain json')

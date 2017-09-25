@@ -65,7 +65,7 @@ migrations
 
 tmp/*
 statics_dir/static1/ocSSCY
-*.cookie.data
+src/cookie/cookie.data
 *.un~
 
 tags

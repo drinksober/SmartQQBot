@@ -105,6 +105,9 @@ class HttpClient(object):
                 return c.value
         return ''
 
+    def clear_cookies(self):
+        os.unlink(self._cookie_file)
+
     def download(self, url, fname):
         with open(fname, "wb") as o_file:
             try:
