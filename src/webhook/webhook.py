@@ -22,7 +22,7 @@ def on_push(data):
     commit = data['head_commit']
     commit = commit['id'][-7:] + ': ' + commit['message']
     text = '\n'.join((full_name, commit))
-    _config = config[full_name]
+    _config = config.get(full_name, {})
     for group in _config.get('groups', default_groups):
         bot.send_group_msg(text, groupById[group], 1)
     for friend in _config.get('friends', []):
