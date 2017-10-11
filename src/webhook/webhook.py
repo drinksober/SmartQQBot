@@ -1,9 +1,10 @@
 # coding: utf-8
 from smart_qq_bot.httpserver import webhook
 
-config = {"baxterthehacker/public-repo": {'groups': [u"锄禾日当午"], 'friends': ['746058508']}}
+config = {"drinksober/qq_webhook": {'groups': [u"青铜王者"], 'friends': ['']}, 'default_groups': [u'青铜王者']}
 groupById = {}
 friendById = {}
+default_groups = config['default_groups']
 
 
 @webhook.hook()
@@ -22,7 +23,7 @@ def on_push(data):
     commit = commit['id'][-7:] + ': ' + commit['message']
     text = '\n'.join((full_name, commit))
     _config = config[full_name]
-    for group in _config.get('groups', []):
+    for group in _config.get('groups', default_groups):
         bot.send_group_msg(text, groupById[group], 1)
     for friend in _config.get('friends', []):
         bot.send_friend_msg(text, friendById[friend], 1)
