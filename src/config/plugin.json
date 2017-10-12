@@ -1,7 +1,0 @@
-{
-  "plugin_packages": ["webhook.webhook"],
-  "plugin_on": [
-      "basic",
-      "manager"
-  ]
-}
