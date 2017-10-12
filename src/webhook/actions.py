@@ -19,8 +19,8 @@ def on_push(data):
     text = '\n'.join((full_name, commit))
     _config = config.get(full_name, {})
     for group in _config.get('groups', default_groups):
-        command = b'send buddy {} {}'.format(group.encode('utf8'), text.encode('utf8'))
-        Query(command)
+        command = b'send group {} {}'.format(group.encode('utf8'), text.encode('utf8'))
+        Query('127.0.0.1', '8188', command)
     for friend in _config.get('friends', []):
         command = b'send buddy {} {}'.format(friend.encode('utf8'), text.encode('utf8'))
-        Query(command)
+        Query('127.0.0.1', '8188', command)
