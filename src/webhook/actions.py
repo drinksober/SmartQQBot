@@ -1,5 +1,5 @@
 # coding: utf-8
-from smart_qq_bot.httpserver import webhook
+from app import webhook
 from qqbot.mysocketserver import Query
 
 config = {'default_groups': [u'青铜王者']}
