@@ -1,8 +1,9 @@
 from flask import Flask
-from webhook.github import Webhook
+from webhook import webhook
 
 app = Flask(__name__)  # Standard Flask app
-webhook = Webhook(app)  # Defines '/postreceive' endpoint
+
+app.route('/postreceive')(webhook.view)
 
 
 def run(host="0.0.0.0", port=8888):

@@ -1,6 +1,8 @@
 # coding: utf-8
-from app import webhook
+from .github import Webhook
 from qqbot.mysocketserver import Query
+
+webhook = Webhook()
 
 config = {'default_groups': [u'青铜王者']}
 default_groups = config['default_groups']
