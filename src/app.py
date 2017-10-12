@@ -3,7 +3,7 @@ from webhook import webhook
 
 app = Flask(__name__)  # Standard Flask app
 
-app.route('/postreceive')(webhook.view)
+app.route('/postreceive', methods=['POST'])(webhook.view)
 
 
 def run(host="0.0.0.0", port=8888):

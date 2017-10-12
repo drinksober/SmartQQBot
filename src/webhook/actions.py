@@ -1,6 +1,8 @@
 # coding: utf-8
 from .github import Webhook
 from qqbot.mysocketserver import Query
+from qqbot.common import STR2BYTES
+
 
 webhook = Webhook()
 
@@ -17,6 +19,8 @@ def on_push(data):
     text = '\n'.join((full_name, commit))
     _config = config.get(full_name, {})
     for group in _config.get('groups', default_groups):
-        Query('send', 'group', group, text)
+        command = b'send buddy {} {}'.format(group.encode('utf8'), text.encode('utf8'))
+        Query(command)
     for friend in _config.get('friends', []):
-        Query('send', 'buddy', friend, text)
+        command = b'send buddy {} {}'.format(friend.encode('utf8'), text.encode('utf8'))
+        Query(command)
