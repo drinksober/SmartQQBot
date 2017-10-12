@@ -1,5 +1,5 @@
 from flask import Flask
-from .github import Webhook
+from webhook.github import Webhook
 
 
 app = Flask(__name__)  # Standard Flask app
