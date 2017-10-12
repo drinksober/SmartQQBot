@@ -53,7 +53,6 @@ class Webhook(object):
     def _postreceive(self):
         """Callback from Flask"""
 
-        print(request.headers)
         digest = self._get_digest()
 
         if digest is not None:
