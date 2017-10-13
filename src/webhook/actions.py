@@ -25,12 +25,13 @@ def on_push(data):
         data = json.loads(data)
     if 'head_commit' in data:  # github
         full_name = data['repository']['full_name']
-        commit = data['head_commit']
+        commits = data['commits']
     else:
         full_name = data['project']['path_with_namespace']
-        commit = data['commits'][0]
-    author = commit['author']['name']
-    commit = commit['id'][-7:] + ': ' + commit['message']
+        commits = data['commits']
+    commit = '\n'.join(commit['id'][-7:] + ': ' + commit['message'] for commit in commits)
+    full_name = '[{}] {}个新的提交'.format(full_name, len(commits))
+    author = commits[0]['author']['name']
     text = '\n'.join((author, full_name, commit))
     name = '/'.join(full_name.split('/')[1:])   # project name
     _config = config.get(full_name, {}) or config.get(name, {})

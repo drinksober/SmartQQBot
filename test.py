@@ -13,9 +13,7 @@ headers = {
     'cache-control': "no-cache",
     'postman-token': "9d6f88ea-44f0-aa1d-6b83-31acf4c0ccae"
 }
-import json
-payload = json.dumps(payload)
 
-response = requests.post(url, data=payload, headers=headers)
+response = requests.post(url, json=payload, headers=headers)
 
 print(response.text)
