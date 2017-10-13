@@ -20,14 +20,21 @@ default_friends = config['default_friends']
 @webhook.hook()
 def on_push(data):
     # 发送一条群消息
+    full_name = ''
     if not isinstance(data, dict):
         import json
         data = json.loads(data)
-    full_name = data['repository']['full_name']
-    name = '/'.join(full_name.split('/')[1:])
-    commit = data['head_commit']
-    commit = commit['id'][-7:] + ': ' + commit['message']
-    text = '\n'.join((full_name, commit))
+    if 'head_commit' in data:  # github
+        full_name = data['repository']['full_name']
+        commit = data['head_commit']
+        commit = commit['id'][-7:] + ': ' + commit['message']
+        text = '\n'.join((full_name, commit))
+    else:
+        full_name = data['project']['path_with_namespace']
+        commit = data['commits']
+        commit = commit['id'][-7:] + ': ' + commit['message']
+        text = '\n'.join((full_name, commit))
+    name = '/'.join(full_name.split('/')[1:])   # project name
     _config = config.get(full_name, {}) or config.get(name, {})
     for group in _config.get('groups', default_groups):
         command = u'send group {} {}'.format(group, text).encode('utf8')
