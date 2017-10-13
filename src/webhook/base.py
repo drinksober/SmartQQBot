@@ -57,6 +57,8 @@ class Webhook(object):
         digest = self._get_digest()
         event = request.headers.get('X-Gitlab-Event') or request.headers.get(
             'X-Github-Event')
+        event = EVENT_MAP.get(event, event)  # gitlab event -> github event
+        logger.debug(request.headers)
         if not event:
             abort(400, 'Missing header: ' + 'X-Github-Event')
 
@@ -80,6 +82,8 @@ class Webhook(object):
 
         return '', 204
 
+
+EVENT_MAP = {'Push Hook': 'push'}
 
 EVENT_DESCRIPTIONS = {
     'commit_comment':
