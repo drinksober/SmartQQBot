@@ -30,9 +30,9 @@ def on_push(data):
         full_name = data['project']['path_with_namespace']
         commits = data['commits']
     commit = '\n'.join(commit['id'][-7:] + ': ' + commit['message'] for commit in commits)
-    full_name = '[{}] {}个新的提交'.format(full_name, len(commits))
+    title = '[{}] {}个新的提交'.format(full_name, len(commits))
     author = commits[0]['author']['name']
-    text = '\n'.join((author, full_name, commit))
+    text = '\n'.join((author, title, commit))
     name = '/'.join(full_name.split('/')[1:])   # project name
     _config = config.get(full_name, {}) or config.get(name, {})
     for group in _config.get('groups', default_groups):
