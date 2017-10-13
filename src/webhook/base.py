@@ -1,27 +1,28 @@
-import collections
-import hashlib
-import hmac
-import logging
-import json
+# encoding: utf-8
+from __future__ import division, unicode_literals
 
+import json
+import hmac
+import hashlib
+import collections
+import logging
 import six
 from flask import abort, request
 
+logger = logging.getLogger('webhook')
+logger.setLevel('DEBUG')
+formatter = logging.Formatter('%(name)-12s: %(levelname)-8s %(message)s')
+fh = logging.FileHandler('log')
+fh.setFormatter(formatter)
+logger.addHandler(fh)
+
 
 class Webhook(object):
-    """
-    Construct a webhook on the given :code:`app`.
-
-    :param app: Flask app that will host the webhook
-    :param endpoint: the endpoint for the registered URL rule
-    :param secret: Optional secret, used to authenticate the hook comes from Github
-    """
-
     def __init__(self, secret=None):
         self._hooks = collections.defaultdict(list)
-        self._logger = logging.getLogger('webhook')
         if secret is not None and not isinstance(secret, six.binary_type):
             secret = secret.encode('utf-8')
+        self.logger = logger
         self._secret = secret
 
     def hook(self, event_type='push'):
@@ -38,6 +39,12 @@ class Webhook(object):
 
         return decorator
 
+    def _format_event(self, event_type, data):
+        try:
+            return EVENT_DESCRIPTIONS[event_type].format(**data)
+        except KeyError:
+            return event_type
+
     def _get_digest(self):
         """Return message digest if a secret key was provided"""
 
@@ -48,6 +55,10 @@ class Webhook(object):
         """Callback from Flask"""
 
         digest = self._get_digest()
+        event = request.headers.get('X-Gitlab-Event') or request.headers.get(
+            'X-Github-Event')
+        if not event:
+            abort(400, 'Missing header: ' + 'X-Github-Event')
 
         if digest is not None:
             sig_parts = _get_header('X-Hub-Signature').split('=', 1)
@@ -58,29 +69,16 @@ class Webhook(object):
                     or not hmac.compare_digest(sig_parts[1], digest)):
                 abort(400, 'Invalid signature')
 
-        event_type = _get_header('X-Github-Event')
-        data = json.loads(request.form['payload'])
+        data = request.json or json.loads(request.form['payload'])
+        logger.debug(data)
 
         if data is None:
             abort(400, 'Request body must contain json')
 
-        self._logger.info('%s (%s)',
-                          _format_event(event_type, data),
-                          _get_header('X-Github-Delivery'))
-
-        for hook in self._hooks.get(event_type, []):
+        for hook in self._hooks.get(event, []):
             hook(data)
 
         return '', 204
-
-
-def _get_header(key):
-    """Return message header"""
-
-    try:
-        return request.headers[key]
-    except KeyError:
-        abort(400, 'Missing header: ' + key)
 
 
 EVENT_DESCRIPTIONS = {
@@ -151,10 +149,3 @@ EVENT_DESCRIPTIONS = {
     '{sender[login]} {action} watch in repository '
     '{repository[full_name]}'
 }
-
-
-def _format_event(event_type, data):
-    try:
-        return EVENT_DESCRIPTIONS[event_type].format(**data)
-    except KeyError:
-        return event_type

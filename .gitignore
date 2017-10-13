@@ -3,6 +3,7 @@
 *v.jpg
 # C extensions
 *.so
+*log
 
 # Packages
 *.egg
